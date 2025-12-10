@@ -1,67 +1,97 @@
-﻿using Opc.Ua;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Opc.Ua;
 using Opc.Ua.Client;
+using Opc.Ua.Configuration;
 
-public class Program
+class Program
 {
-    private static async Task Main(string[] args)
+    static async Task Main(string[] args)
     {
-        string endpointUrl = "opc.tcp://localhost:16550";
-        bool useSecurity  = false;
-        
         Console.WriteLine("Start");
 
-        var config = new ApplicationConfiguration()
+        string endpointUrl = "opc.tcp://192.168.1.10:4840";  // ← твой MasterSCADA
+
+        // Папка, где будут лежать все сертификаты (создаётся автоматически рядом с exe)
+        string certBasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pki");
+
+        var config = new ApplicationConfiguration
         {
-            ApplicationName = "MasterScadaClient",
+            ApplicationName = "TestClient",
             ApplicationType = ApplicationType.Client,
-            ApplicationUri = $"urn:{Environment.MachineName}:MasterScadaClient",
+            ApplicationUri = $"urn:{Environment.MachineName}:TestClient",
+
             SecurityConfiguration = new SecurityConfiguration
             {
-                AutoAcceptUntrustedCertificates = true // Ключевая строчка
-                                                       // Без неё при первом подключении ты получишь ошибку "сертификат сервера не доверенный".
-                                                       // Эта строка автоматически говорит: "Да, я доверяю сертификату MasterSCADA, даже если он самоподписанный".
+                // ← Свой сертификат клиента
+                ApplicationCertificate = new CertificateIdentifier
+                {
+                    StoreType = CertificateStoreType.Directory,
+                    StorePath = Path.Combine(certBasePath, "own"),
+                    SubjectName = "TestClient"
+                },
+
+                // ← Доверенные сертификаты серверов (сюда попадёт сертификат MasterSCADA)
+                TrustedPeerCertificates = new CertificateTrustList
+                {
+                    StoreType = CertificateStoreType.Directory,
+                    StorePath = Path.Combine(certBasePath, "trusted")
+                },
+
+                // ← Сертификаты издателей (TrustedIssuerCertificates) — ОБЯЗАТЕЛЬНО на Linux/macOS!
+                TrustedIssuerCertificates = new CertificateTrustList
+                {
+                    StoreType = CertificateStoreType.Directory,
+                    StorePath = Path.Combine(certBasePath, "issuers")
+                },
+
+                // ← Отклонённые сертификаты
+                RejectedCertificateStore = new CertificateTrustList
+                {
+                    StoreType = CertificateStoreType.Directory,
+                    StorePath = Path.Combine(certBasePath, "rejected")
+                },
+
+                AutoAcceptUntrustedCertificates = true,
+                RejectSHA1SignedCertificates = false,
+                MinimumCertificateKeySize = 1024
             },
+
+            TransportConfigurations = new TransportConfigurationCollection(),
             ClientConfiguration = new ClientConfiguration()
         };
-        // Проверка, что конфигурация корректна (создаёт папки для сертификатов, проверяет права и т.д.).
+
+        // Создаём папки, если их нет
+        Directory.CreateDirectory(Path.Combine(certBasePath, "own", "certs"));
+        Directory.CreateDirectory(Path.Combine(certBasePath, "own", "private"));
+        Directory.CreateDirectory(Path.Combine(certBasePath, "trusted", "certs"));
+        Directory.CreateDirectory(Path.Combine(certBasePath, "issuers", "certs"));
+        Directory.CreateDirectory(Path.Combine(certBasePath, "rejected"));
+
         await config.Validate(ApplicationType.Client);
-        // Ищем и выбираем подходящую конечную точку (Endpoint) на сервере MasterSCADA.
-        var selectedEndpoint = CoreClientUtils.SelectEndpoint(config, endpointUrl, false);
-        // Оборачиваем выбранный endpoint в объект, который понимает Session.Create.
+
+        var selectedEndpoint = CoreClientUtils.SelectEndpoint(config, endpointUrl, useSecurity: false);
         var endpoint = new ConfiguredEndpoint(null, selectedEndpoint);
-        // Создаём сессию — это и есть живое подключение к MasterSCADA
+
         var session = await Session.Create(
-            configuration: config, 
-            endpoint: endpoint, 
-            updateBeforeConnect: false, 
-            sessionName: "", 
-            sessionTimeout: 60000, 
-            identity: new UserIdentity(), 
-            preferredLocales: null);
+            config,
+            endpoint,
+            updateBeforeConnect: false,
+            sessionName: "TestSession",
+            sessionTimeout: 60000,
+            identity: new UserIdentity(),   // анонимно
+            preferredLocales: null
+        );
 
         Console.WriteLine("Подключено к MasterSCADA!");
-        try
-        {
-            // Пример чтения тега
-            /*var nodeId = new NodeId("ns=2;s=Температура");
-            var readValue = new ReadValueId
-            {
-                NodeId = nodeId,
-                AttributeId = Attributes.Value
-            };*/
-            
-            var value = session.ReadValue("ns=2;s=Температура");
-            Console.WriteLine("Температура = " + value);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-        finally
-        {
-            Console.WriteLine("Завершение...");
-            session?.Close();
-        }
+
+        var value = session.ReadValue("ns=2;s=Температура");
+        Console.WriteLine($"Температура = {value}");
+
+        Console.WriteLine("Нажмите любую клавишу...");
+        Console.ReadKey();
+
+        await session.CloseAsync();
     }
 }
