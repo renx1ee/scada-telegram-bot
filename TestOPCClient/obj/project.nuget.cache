@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "9JTAfJlYk7w=",
+  "success": true,
+  "projectFilePath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/TestOPCClient.csproj",
+  "expectedPackageFiles": [
+    "/Users/re/.nuget/packages/bitfaster.caching/2.5.4/bitfaster.caching.2.5.4.nupkg.sha512",
+    "/Users/re/.nuget/packages/bouncycastle.cryptography/2.6.2/bouncycastle.cryptography.2.6.2.nupkg.sha512",
+    "/Users/re/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/9.0.9/microsoft.extensions.dependencyinjection.abstractions.9.0.9.nupkg.sha512",
+    "/Users/re/.nuget/packages/microsoft.extensions.logging.abstractions/9.0.9/microsoft.extensions.logging.abstractions.9.0.9.nupkg.sha512",
+    "/Users/re/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua/1.5.377.22/opcfoundation.netstandard.opc.ua.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.client/1.5.377.22/opcfoundation.netstandard.opc.ua.client.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.configuration/1.5.377.22/opcfoundation.netstandard.opc.ua.configuration.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.core/1.5.377.22/opcfoundation.netstandard.opc.ua.core.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.gds.client.common/1.5.377.22/opcfoundation.netstandard.opc.ua.gds.client.common.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.gds.server.common/1.5.377.22/opcfoundation.netstandard.opc.ua.gds.server.common.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.security.certificates/1.5.377.22/opcfoundation.netstandard.opc.ua.security.certificates.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/opcfoundation.netstandard.opc.ua.server/1.5.377.22/opcfoundation.netstandard.opc.ua.server.1.5.377.22.nupkg.sha512",
+    "/Users/re/.nuget/packages/system.diagnostics.diagnosticsource/9.0.9/system.diagnostics.diagnosticsource.9.0.9.nupkg.sha512",
+    "/Users/re/.nuget/packages/system.formats.asn1/9.0.9/system.formats.asn1.9.0.9.nupkg.sha512"
+  ],
+  "logs": []
+}

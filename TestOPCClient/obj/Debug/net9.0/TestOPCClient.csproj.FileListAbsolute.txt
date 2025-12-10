@@ -1,0 +1,14 @@
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/bin/Debug/net9.0/TestOPCClient
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/bin/Debug/net9.0/TestOPCClient.deps.json
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/bin/Debug/net9.0/TestOPCClient.runtimeconfig.json
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/bin/Debug/net9.0/TestOPCClient.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/bin/Debug/net9.0/TestOPCClient.pdb
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.GeneratedMSBuildEditorConfig.editorconfig
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.AssemblyInfoInputs.cache
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.AssemblyInfo.cs
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.csproj.CoreCompileInputs.cache
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/refint/TestOPCClient.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.pdb
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/TestOPCClient.genruntimeconfig.cache
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/TestOPCClient/obj/Debug/net9.0/ref/TestOPCClient.dll

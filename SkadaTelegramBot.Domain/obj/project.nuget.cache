@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "xoWpbSpaVVA=",
+  "success": true,
+  "projectFilePath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot.Domain/SkadaTelegramBot.Domain.csproj",
+  "expectedPackageFiles": [
+    "/Users/re/.nuget/packages/microsoft.aspnetcore.openapi/9.0.8/microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
+    "/Users/re/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
