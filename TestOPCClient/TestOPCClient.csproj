@@ -11,4 +11,8 @@
       <PackageReference Include="OPCFoundation.NetStandard.Opc.Ua" Version="1.5.377.22" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Configurations\" />
+    </ItemGroup>
+
 </Project>

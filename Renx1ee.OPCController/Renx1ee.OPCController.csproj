@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Renx1ee.OPCControl</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="OPCFoundation.NetStandard.Opc.Ua.Client" Version="1.5.377.22" />
+      <PackageReference Include="OPCFoundation.NetStandard.Opc.Ua.Core" Version="1.5.377.22" />
+      <PackageReference Include="Telegram.Bots.Extensions.Polling" Version="5.9.0" />
+    </ItemGroup>
+
+</Project>

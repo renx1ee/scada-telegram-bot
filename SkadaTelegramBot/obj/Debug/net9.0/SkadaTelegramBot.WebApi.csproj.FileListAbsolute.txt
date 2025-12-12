@@ -37,3 +37,17 @@
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/SkadaTelegramBot.WebApi.pdb
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/SkadaTelegramBot.WebApi.genruntimeconfig.cache
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/ref/SkadaTelegramBot.WebApi.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/BitFaster.Caching.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/BouncyCastle.Cryptography.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Client.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Configuration.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Core.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Gds.Client.Common.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Gds.Server.Common.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Security.Certificates.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Opc.Ua.Server.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/System.Diagnostics.DiagnosticSource.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/System.Formats.Asn1.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/SkadaTelegramBot.WebApi.sourcelink.json

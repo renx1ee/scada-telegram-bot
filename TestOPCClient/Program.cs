@@ -1,97 +1,115 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Opc.Ua;
 using Opc.Ua.Client;
-using Opc.Ua.Configuration;
+using TestOPCClient.Common;
 
 class Program
 {
     static async Task Main(string[] args)
     {
-        Console.WriteLine("Start");
-
-        string endpointUrl = "opc.tcp://192.168.1.10:4840";  // ← твой MasterSCADA
-
-        // Папка, где будут лежать все сертификаты (создаётся автоматически рядом с exe)
-        string certBasePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pki");
-
-        var config = new ApplicationConfiguration
+        Console.WriteLine("Starting...");
+        Console.WriteLine($"Current URL: {Constants.ENDPOINT_URL}");
+        
+        // 1. Create a config.
+        var config = new ApplicationConfiguration()
         {
-            ApplicationName = "TestClient",
+            ApplicationName = Constants.APPLICATION_NAME,
             ApplicationType = ApplicationType.Client,
-            ApplicationUri = $"urn:{Environment.MachineName}:TestClient",
-
-            SecurityConfiguration = new SecurityConfiguration
+            ApplicationUri = Constants.APPLICATION_URI,
+            SecurityConfiguration = new SecurityConfiguration()
             {
-                // ← Свой сертификат клиента
-                ApplicationCertificate = new CertificateIdentifier
-                {
-                    StoreType = CertificateStoreType.Directory,
-                    StorePath = Path.Combine(certBasePath, "own"),
-                    SubjectName = "TestClient"
-                },
-
-                // ← Доверенные сертификаты серверов (сюда попадёт сертификат MasterSCADA)
-                TrustedPeerCertificates = new CertificateTrustList
-                {
-                    StoreType = CertificateStoreType.Directory,
-                    StorePath = Path.Combine(certBasePath, "trusted")
-                },
-
-                // ← Сертификаты издателей (TrustedIssuerCertificates) — ОБЯЗАТЕЛЬНО на Linux/macOS!
-                TrustedIssuerCertificates = new CertificateTrustList
-                {
-                    StoreType = CertificateStoreType.Directory,
-                    StorePath = Path.Combine(certBasePath, "issuers")
-                },
-
-                // ← Отклонённые сертификаты
-                RejectedCertificateStore = new CertificateTrustList
-                {
-                    StoreType = CertificateStoreType.Directory,
-                    StorePath = Path.Combine(certBasePath, "rejected")
-                },
-
-                AutoAcceptUntrustedCertificates = true,
-                RejectSHA1SignedCertificates = false,
-                MinimumCertificateKeySize = 1024
             },
-
             TransportConfigurations = new TransportConfigurationCollection(),
             ClientConfiguration = new ClientConfiguration()
         };
-
-        // Создаём папки, если их нет
-        Directory.CreateDirectory(Path.Combine(certBasePath, "own", "certs"));
-        Directory.CreateDirectory(Path.Combine(certBasePath, "own", "private"));
-        Directory.CreateDirectory(Path.Combine(certBasePath, "trusted", "certs"));
-        Directory.CreateDirectory(Path.Combine(certBasePath, "issuers", "certs"));
-        Directory.CreateDirectory(Path.Combine(certBasePath, "rejected"));
-
+        
+        // 2. Create folders if not exists.
+        
+        // 3. Validation.
         await config.Validate(ApplicationType.Client);
+        
+        // 4. Try to connect the host.
+        await TryToConnect(Constants.ENDPOINT_URL);
 
-        var selectedEndpoint = CoreClientUtils.SelectEndpoint(config, endpointUrl, useSecurity: false);
-        var endpoint = new ConfiguredEndpoint(null, selectedEndpoint);
+        try
+        {
+            // 5. Search and select the certain Endpoint on the MasterSCADA server.
+            var selectedEndpoint = CoreClientUtils.SelectEndpoint(
+                application: config,
+                discoveryUrl: Constants.ENDPOINT_URL,
+                useSecurity: false);
+            // 6. Wrap the selected point in an object that accept Session.Create.
+            var endpoint = new ConfiguredEndpoint(null, selectedEndpoint);
+            // 7. Create a session.
+            var session = await Session.Create(
+                config,
+                endpoint: endpoint,
+                updateBeforeConnect: false,
+                sessionName: Constants.SESSION_NAME,
+                sessionTimeout: Constants.SESSION_TIMEOUT,
+                identity: new UserIdentity(),
+                preferredLocales: null
+            );
 
-        var session = await Session.Create(
-            config,
-            endpoint,
-            updateBeforeConnect: false,
-            sessionName: "TestSession",
-            sessionTimeout: 60000,
-            identity: new UserIdentity(),   // анонимно
-            preferredLocales: null
-        );
+            if (session == null)
+            {
+                Console.WriteLine("session is null");
+                return;
+            }
+            
+            if (!session.Connected)
+            {
+                Console.WriteLine("session.Connected == false");
+                return;
+            }
 
-        Console.WriteLine("Подключено к MasterSCADA!");
+            Console.WriteLine($"Session ID: {session.SessionId}");
 
-        var value = session.ReadValue("ns=2;s=Температура");
-        Console.WriteLine($"Температура = {value}");
+            try
+            {
+                // This variable has any server
+                var serverStatus = session.ReadValue("i=2258");
+                Console.WriteLine("Status: " + serverStatus);
+                /*Console.WriteLine($"Time of server: {((ServerStatusDataType)serverStatus.Value).StartTime}");
+                Console.WriteLine($"Server statue: {((ServerStatusDataType)serverStatus.Value).State}");*/
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Session is not working");
+                return;
+            }
+            // 8. Try to read value
+            try
+            {
+                Console.WriteLine("Tag name: 'ns=1;i=39153'");
+                var nodeId = new NodeId("ns=1;i=39153");
+            }
+            finally
+            {
+                session?.Close();
+            }
+        }
+        catch (ServiceResultException e) when (e.StatusCode == StatusCodes.BadSecureChannelClosed)
+        {
+            Console.WriteLine("Exception: ", e);
+            return;
+        }
+        
+        Console.WriteLine("Press any key to...");
+    }
 
-        Console.WriteLine("Нажмите любую клавишу...");
-        Console.ReadKey();
-
-        await session.CloseAsync();
+    private static async Task TryToConnect(string url)
+    {
+        var uri = new Uri(url);
+        Console.WriteLine($"Attempt to connect to: {uri.Host}");
+        try
+        {
+            var ip = await Dns.GetHostAddressesAsync(uri.Host);
+            Console.WriteLine($"DNS resolved in: {ip}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("DNS wasn't resolved: " + e.Message);
+        }
     }
 }

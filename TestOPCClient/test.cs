@@ -8,7 +8,7 @@ namespace MasterScadaOpcUaClient
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static async Task Maine(string[] args)
         {
             // URL сервера MasterSCADA (замените на ваш IP/порт)
             string endpointUrl = "opc.tcp://localhost:4840";  // Пример: opc.tcp://192.168.1.10:4840

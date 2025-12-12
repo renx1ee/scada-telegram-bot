@@ -50,7 +50,7 @@ public class UpdateHandler
                 await botClient.SendMessage(
                     chatId: chatId,
                     text: "Вас приветствует мастер скада бот! \n " +
-                          "Отправте \\help что бы получить список доступных комманд!",
+                          "Отправте /help что бы получить список доступных комманд!",
                     cancellationToken: cancellationToken);
                 break;
             case "/help":
