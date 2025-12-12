@@ -1,6 +1,0 @@
-@SkadaTelegramBot.Domain_HostAddress = http://localhost:5076
-
-GET {{SkadaTelegramBot.Domain_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
