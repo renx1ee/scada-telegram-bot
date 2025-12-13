@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TestOPCClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7c7f5b031df6f6ca1d0706ba6cb5b809ff5675f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+18d39acbddc0a3c5c52598f346f2208c1d76d4ee")]
 [assembly: System.Reflection.AssemblyProductAttribute("TestOPCClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TestOPCClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

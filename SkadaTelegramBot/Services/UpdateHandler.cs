@@ -1,7 +1,10 @@
 using System.Text;
+using SkadaTelegramBot_.DTOs;
 using Telegram.Bot;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace SkadaTelegramBot_.Services;
 
@@ -14,6 +17,8 @@ public class UpdateHandler
     {
         try
         {
+            
+            
             var handler = update.Type switch
             {
                 UpdateType.Message => OnMessageReceived(botClient, update.Message, cancellationToken),
@@ -110,6 +115,50 @@ public class UpdateHandler
                 break;
         }
     }
+
+    public async Task SendMessageToUsers(
+        RequestDto dto,
+        ITelegramBotClient botClient,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            foreach (var user in dto.TelegramIds)
+            {
+                await botClient.SendMessage(
+                    chatId: user,
+                    text: dto.Message,
+                    cancellationToken: cancellationToken);
+            
+                Console.WriteLine($"Сообщение отправлено пользователю {user}");
+            }
+        }
+        catch (ApiRequestException e)
+        {
+            Console.WriteLine($"Ошибка при отправке coобщения", e.Message);
+        }
+    }
+    
+    public async Task SendMessageToUser(
+        long userId,
+        string message,
+        ITelegramBotClient botClient,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await botClient.SendMessage(
+                chatId: userId,
+                text: message,
+                cancellationToken: cancellationToken);
+        
+            Console.WriteLine($"Сообщение отправлено пользователю {userId}");
+        }
+        catch (ApiRequestException e)
+        {
+            Console.WriteLine($"Ошибка при отправке coобщения", e.Message);
+        }
+    }
     
     private async Task OnCallbackQueryReceived(
         ITelegramBotClient botClient,
@@ -133,5 +182,26 @@ public class UpdateHandler
         CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+    }
+    
+    public async static Task KeyboardTest(
+        ITelegramBotClient botClient,
+        CancellationToken cancellationToken,
+        long chatId)
+    {
+        var replyKeyboard = new ReplyKeyboardMarkup(new[]
+        {
+            new KeyboardButton[] { "Button 1", "Button 2"},
+            new KeyboardButton[] { "Button 3"}
+        })
+        {
+            ResizeKeyboard = true
+        };
+
+        await botClient.SendMessage(
+            chatId: chatId,
+            text: "",
+            replyMarkup: replyKeyboard,
+            cancellationToken: cancellationToken);
     }
 }

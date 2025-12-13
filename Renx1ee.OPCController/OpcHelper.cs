@@ -18,22 +18,21 @@ public class OpcHelper
         this._configuration = configuration;
     }
     
-    public async Task GetValueAsync(
-        string url, 
+    public async Task<string> GetValueAsync(
         string nodeId,
         CancellationToken cancellationToken)
     {
         Console.WriteLine("Starting...");
-        Console.WriteLine($"Current URL: {url}");
+        Console.WriteLine($"Current URL: {_endpointUrl}");
         await _configuration.Validate(ApplicationType.Client);
         
-        await TryToConnect(url);
+        await TryToConnect(_endpointUrl);
 
         try
         {
             var selectedEndpoint = CoreClientUtils.SelectEndpoint(
                 application: _configuration,
-                discoveryUrl: url,
+                discoveryUrl: _endpointUrl,
                 useSecurity: false);
             
             var endpoint = new ConfiguredEndpoint(null, selectedEndpoint);
@@ -50,13 +49,14 @@ public class OpcHelper
             );
             
             if(await SessionValidation(session) == false)
-                return;
+                return string.Empty;
             
             try
             {
                 Console.WriteLine($"Node Id: '{nodeId}'");
                 var result = session.ReadValue(nodeId);
                 Console.WriteLine($"Node result: {result.Value}");
+                return result.Value.ToString();
             }
             finally
             {
@@ -66,6 +66,7 @@ public class OpcHelper
         catch (ServiceResultException e) when (e.StatusCode == StatusCodes.BadSecureChannelClosed)
         {
             Console.WriteLine("Exception: ", e);
+            return string.Empty;
         }
     }
 

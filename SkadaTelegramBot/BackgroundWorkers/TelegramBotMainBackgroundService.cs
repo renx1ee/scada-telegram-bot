@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Microsoft.Extensions.Options;
+using Renx1ee.OPCControl;
 using SkadaTelegramBot_.Configurations;
+using SkadaTelegramBot_.DTOs;
 using SkadaTelegramBot_.Services;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -9,15 +12,16 @@ using Telegram.Bot.Types.Enums;
 
 namespace SkadaTelegramBot_.BackgroundWorkers;
 
-public class TelegramBotBackgroundService : BackgroundService
+public class TelegramBotMainBackgroundService : BackgroundService
 {
-    private readonly ILogger<TelegramBotBackgroundService> _logger;
+    private readonly ILogger<TelegramBotMainBackgroundService> _logger;
     private readonly IServiceProvider _serviceProvider;
     private readonly BotConfiguration _botConfiguration;
     private TelegramBotClient _botClient;
+    private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(1);
 
-    public TelegramBotBackgroundService(
-        ILogger<TelegramBotBackgroundService> logger,
+    public TelegramBotMainBackgroundService(
+        ILogger<TelegramBotMainBackgroundService> logger,
         IServiceProvider serviceProvider,
         IOptions<BotConfiguration> botOptions)
     {
@@ -29,18 +33,16 @@ public class TelegramBotBackgroundService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         string token = "8046621610:AAER-ci_NE92mAYbgZmMGMRTG-f9qU-eghE";
+        string nodeId = "";
         _botClient = new TelegramBotClient(token);
-
-        var me = await _botClient.GetMe(stoppingToken);
 
         var receiverOptions = new ReceiverOptions()
         {
             AllowedUpdates = new[]
             {
-                UpdateType.Message,
+                UpdateType.Message
             },
             DropPendingUpdates = false
-            //ThrowPendingUpdates = true,
         };
 
         _botClient.StartReceiving(
@@ -62,7 +64,7 @@ public class TelegramBotBackgroundService : BackgroundService
         {
             using var scope = _serviceProvider.CreateScope();
             var updateHandler = scope.ServiceProvider.GetService<UpdateHandler>()!;
-
+            
             await updateHandler.HandleUpdateAsync(botClient, update, cancellationToken);
         }
         catch (Exception e)
@@ -93,13 +95,7 @@ public class TelegramBotBackgroundService : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(_pollInterval, stoppingToken);
         }
-    }
-    
-    private async Task StopAsync(CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("Остановка бота...");
-        await base.StopAsync(cancellationToken);
     }
 }

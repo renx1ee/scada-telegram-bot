@@ -914,6 +914,21 @@
         "runtime": {
           "lib/net6.0/Telegram.Bots.Extensions.Polling.dll": {}
         }
+      },
+      "Renx1ee.OPCController/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "OPCFoundation.NetStandard.Opc.Ua.Client": "1.5.377.22",
+          "OPCFoundation.NetStandard.Opc.Ua.Core": "1.5.377.22",
+          "Telegram.Bots.Extensions.Polling": "5.9.0"
+        },
+        "compile": {
+          "bin/placeholder/Renx1ee.OPCController.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Renx1ee.OPCController.dll": {}
+        }
       }
     }
   },
@@ -2179,12 +2194,18 @@
         "telegram.bots.extensions.polling.5.9.0.nupkg.sha512",
         "telegram.bots.extensions.polling.nuspec"
       ]
+    },
+    "Renx1ee.OPCController/1.0.0": {
+      "type": "project",
+      "path": "../Renx1ee.OPCController/Renx1ee.OPCController.csproj",
+      "msbuildProject": "../Renx1ee.OPCController/Renx1ee.OPCController.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "Microsoft.AspNetCore.OpenApi >= 9.0.8",
       "OPCFoundation.NetStandard.Opc.Ua >= 1.5.377.22",
+      "Renx1ee.OPCController >= 1.0.0",
       "Telegram.Bot >= 22.7.7-dev.1",
       "Telegram.Bots.Extensions.Polling >= 5.9.0"
     ]
@@ -2213,7 +2234,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj": {
+              "projectPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

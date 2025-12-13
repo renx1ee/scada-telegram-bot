@@ -51,3 +51,5 @@
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/System.Diagnostics.DiagnosticSource.dll
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/System.Formats.Asn1.dll
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/SkadaTelegramBot.WebApi.sourcelink.json
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Renx1ee.OPCController.dll
+/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Renx1ee.OPCController.pdb

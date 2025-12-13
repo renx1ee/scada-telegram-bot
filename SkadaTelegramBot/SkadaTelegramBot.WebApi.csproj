@@ -18,4 +18,8 @@
     <Folder Include="Entities\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Renx1ee.OPCController\Renx1ee.OPCController.csproj" />
+  </ItemGroup>
+
 </Project>
