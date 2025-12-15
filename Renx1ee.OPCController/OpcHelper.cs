@@ -3,12 +3,12 @@ using Opc.Ua;
 using Opc.Ua.Client;
 
 namespace Renx1ee.OPCControl;
-
+// TODO IOpcHelper
 public class OpcHelper 
 {
-    // TODO:
     private readonly string _endpointUrl;
     private readonly ApplicationConfiguration _configuration;
+    private static uint _sessionTimeout = 60000;
 
     public OpcHelper(
         string endpointUrl,
@@ -41,8 +41,8 @@ public class OpcHelper
                 configuration: _configuration,
                 endpoint: endpoint,
                 updateBeforeConnect: false,
-                sessionName: "", // TODO:
-                sessionTimeout: 60000, // TODO:
+                sessionName: Guid.NewGuid().ToString(),
+                sessionTimeout: _sessionTimeout, 
                 identity: new UserIdentity(),
                 preferredLocales: null,
                 ct: cancellationToken
@@ -54,7 +54,7 @@ public class OpcHelper
             try
             {
                 Console.WriteLine($"Node Id: '{nodeId}'");
-                var result = session.ReadValue(nodeId);
+                var result = await session.ReadValueAsync(nodeId);
                 Console.WriteLine($"Node result: {result.Value}");
                 return result.Value.ToString();
             }
@@ -71,18 +71,17 @@ public class OpcHelper
     }
 
     public async Task SendValueAsync(
-        string url, 
         string nodeId, 
         string value, 
         CancellationToken cancellationToken)
     {
         Console.WriteLine("Starting...");
-        Console.WriteLine($"Current URL: {url}");
+        Console.WriteLine($"Current URL: {_endpointUrl}");
         try
         {
             var selectedEndpoint = CoreClientUtils.SelectEndpoint(
                 application: _configuration,
-                discoveryUrl: url,
+                discoveryUrl: _endpointUrl,
                 useSecurity: false);
             
             var endpoint = new ConfiguredEndpoint(null, selectedEndpoint);
@@ -119,23 +118,6 @@ public class OpcHelper
                     nodesToWrite: nodesToWrite,
                     ct: cancellationToken
                 );
-
-                if (result.IsCompletedSuccessfully)
-                {
-                    Console.WriteLine("The operation was finished successful!");
-                }
-                else if (result.IsFaulted)
-                {
-                    Console.WriteLine("The operation is faulure!");
-                }
-                else if (result.IsCompleted)
-                {
-                    Console.WriteLine("The operation is compleated!");
-                }
-                else if (result.IsCanceled)
-                {
-                    Console.WriteLine("The operation is cancelled!");
-                }
             }
             finally
             {
@@ -145,7 +127,6 @@ public class OpcHelper
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
         }
     }
     

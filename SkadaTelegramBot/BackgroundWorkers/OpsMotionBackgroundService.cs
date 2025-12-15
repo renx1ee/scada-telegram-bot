@@ -9,80 +9,127 @@ using Telegram.Bot.Exceptions;
 
 namespace SkadaTelegramBot_.BackgroundWorkers;
 
+// {
+//     "Id": 1,
+//     "Message": "Привет, мир!",
+//     "TelegramIds": [1398791366, 8114073508]
+// }
+// ошибки
+//      Использовать OPC UA Subscriptions (подписка на изменения) — идеальный вариант.
+//      Или хотя бы увеличить интервал (например, 5–10 сек) + backoff при ошибках.
+
 public class OpsMotionBackgroundService : BackgroundService
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<OpsMotionBackgroundService> _logger;
     private TelegramBotClient _botClient;
-    private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(1);
+    private readonly UpdateHandler _updateHandler;
+    private readonly OpcHelper _opcHelper;
+    private readonly BotOptions _botOptions;
+    private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(5); // TODO: из конфига
     private string? _lastSentJson = null;
 
     public OpsMotionBackgroundService(
-        ILogger<TelegramBotMainBackgroundService> logger,
-        IServiceProvider serviceProvider,
-        IOptions<BotConfiguration> botOptions)
+        ILogger<OpsMotionBackgroundService> logger,
+        IOptions<BotOptions> botOptions,
+        UpdateHandler updateHandler,
+        OpcHelper opcHelper)
     {
-        this._serviceProvider = serviceProvider;
+        this._logger = logger;
+        this._updateHandler = updateHandler;
+        this._opcHelper = opcHelper;
+        this._botOptions = botOptions.Value
+                           ?? throw new ArgumentNullException($"Argument {_botOptions} is null!");
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        string token = "8046621610:AAER-ci_NE92mAYbgZmMGMRTG-f9qU-eghE";
-        _botClient = new TelegramBotClient(token);
+        _botClient = new TelegramBotClient(_botOptions.BotToken!);
         
         while (!stoppingToken.IsCancellationRequested)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            string? value = null;
+            string? scadaErrorValue = null;
+            
+            try
             {
+                value = await _opcHelper.GetValueAsync(
+                    nodeId: _botOptions.NotificationNodeId!,
+                    cancellationToken: stoppingToken);
+                
+                if (string.IsNullOrEmpty(value) || value == _lastSentJson)
+                    continue;
+            
+                var dto = JsonSerializer.Deserialize<RequestDto>(value);
+
+                if (dto is null)
+                    continue;
+        
+                await _updateHandler.SendMessageToUsers(
+                    dto: dto,
+                    botClient: _botClient,
+                    cancellationToken: stoppingToken
+                );
+
+                _lastSentJson = value;
+            }
+            catch (ApiRequestException ex)
+            {
+                Console.WriteLine($"Telegram API error with sending to user: {ex.Message}");
                 try
                 {
-                    var updateHandler = scope.ServiceProvider.GetService<UpdateHandler>()!;
-                    var opcHelper = scope.ServiceProvider.GetService<OpcHelper>()!;
-
-                    var value = await opcHelper.GetValueAsync(
-                        nodeId: "",
+                    await _opcHelper.SendValueAsync(
+                        nodeId: _botOptions.ErrorNodeId!,
+                        value: CreateScadaErrorJson("Telegram API error", ex.Message),
                         cancellationToken: stoppingToken);
-                    // TEST: 
-                    /*var value = @"
-                                    {
-                                        ""Message"": ""Привет, мир!"",
-                                        ""TelegramIds"": [1398791366, 8114073508]
-                                    }                      
-                                ";*/
-
-                    if (string.IsNullOrEmpty(value))
-                        goto NextIteration;
-                        
-                    if (value == _lastSentJson)
-                        goto NextIteration;
-                
-                    var deserializeResult = JsonSerializer.Deserialize<RequestDto>(value);
-
-                    if (deserializeResult is null)
-                        goto NextIteration;
-            
-                    await updateHandler.SendMessageToUsers(
-                        dto: deserializeResult,
-                        botClient: _botClient,
-                        cancellationToken: stoppingToken
-                    );
-
-                    _lastSentJson = value;
-                }
-                catch (ApiRequestException ex)
-                {
-                    Console.WriteLine($"Error sending to user: {ex.Message}");
-                }
-                catch (JsonException ex)
-                {
-                    Console.WriteLine($"Error deserializing received json: {ex.Message}");
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Error: {e.Message}");
+                    Console.WriteLine(e);
+                    throw;
                 }
             }
-            NextIteration: 
-                await Task.Delay(_pollInterval, stoppingToken);
+            catch (JsonException ex)
+            {
+                Console.WriteLine($"Error deserializing received json: {ex.Message}");
+                try
+                {
+                    await _opcHelper.SendValueAsync(
+                        nodeId: _botOptions.ErrorNodeId!,
+                        value: CreateScadaErrorJson("Invalid JSON from opc", $"Json Serialize exception with {value}"),
+                        cancellationToken: stoppingToken);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    scadaErrorValue = CreateScadaErrorJson($"Error with {value}, message: ", ex.Message);
+                }
+                
+                if (scadaErrorValue != null)
+                {
+                    await _opcHelper.SendValueAsync(
+                        nodeId: _botOptions.ErrorNodeId!,
+                        value: scadaErrorValue,
+                        cancellationToken: stoppingToken);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}");
+            }
+            
+            await Task.Delay(_pollInterval, stoppingToken);
         }
+    }
+
+    private string CreateScadaErrorJson(string errorType, string message, string? details = null)
+    {
+        var errorObj = new
+        {
+            ErrorType = errorType,
+            Message = message,
+            Details = details,
+            Timestamp = DateTime.UtcNow
+        };
+        return JsonSerializer.Serialize(errorObj);
     }
 }

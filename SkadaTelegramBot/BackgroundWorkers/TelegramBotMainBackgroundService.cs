@@ -13,25 +13,24 @@ public class TelegramBotMainBackgroundService : BackgroundService
 {
     private readonly ILogger<TelegramBotMainBackgroundService> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private readonly BotConfiguration _botConfiguration;
+    private readonly BotOptions _botOptions;
     private TelegramBotClient _botClient;
     private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(0, 1, 5);
 
     public TelegramBotMainBackgroundService(
         ILogger<TelegramBotMainBackgroundService> logger,
         IServiceProvider serviceProvider,
-        IOptions<BotConfiguration> botOptions)
+        IOptions<BotOptions> botOptions)
     {
         this._logger = logger;
         this._serviceProvider = serviceProvider;
-        this._botConfiguration = botOptions.Value;
+        this._botOptions = botOptions.Value 
+                           ?? throw new ArgumentNullException($"Argument {_botOptions} is null!");
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        string token = "8046621610:AAER-ci_NE92mAYbgZmMGMRTG-f9qU-eghE";
-        string nodeId = "";
-        _botClient = new TelegramBotClient(token);
+        _botClient = new TelegramBotClient(_botOptions.BotToken!);
 
         var receiverOptions = new ReceiverOptions()
         {
