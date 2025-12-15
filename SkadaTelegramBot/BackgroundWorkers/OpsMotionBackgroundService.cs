@@ -14,6 +14,7 @@ public class OpsMotionBackgroundService : BackgroundService
     private readonly IServiceProvider _serviceProvider;
     private TelegramBotClient _botClient;
     private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(1);
+    private string? _lastSentJson = null;
 
     public OpsMotionBackgroundService(
         ILogger<TelegramBotMainBackgroundService> logger,
@@ -25,6 +26,9 @@ public class OpsMotionBackgroundService : BackgroundService
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        string token = "8046621610:AAER-ci_NE92mAYbgZmMGMRTG-f9qU-eghE";
+        _botClient = new TelegramBotClient(token);
+        
         while (!stoppingToken.IsCancellationRequested)
         {
             using (var scope = _serviceProvider.CreateScope())
@@ -37,20 +41,32 @@ public class OpsMotionBackgroundService : BackgroundService
                     var value = await opcHelper.GetValueAsync(
                         nodeId: "",
                         cancellationToken: stoppingToken);
+                    // TEST: 
+                    /*var value = @"
+                                    {
+                                        ""Message"": ""Привет, мир!"",
+                                        ""TelegramIds"": [1398791366, 8114073508]
+                                    }                      
+                                ";*/
 
                     if (string.IsNullOrEmpty(value))
-                        return;
+                        goto NextIteration;
+                        
+                    if (value == _lastSentJson)
+                        goto NextIteration;
                 
                     var deserializeResult = JsonSerializer.Deserialize<RequestDto>(value);
 
                     if (deserializeResult is null)
-                        return;
+                        goto NextIteration;
             
                     await updateHandler.SendMessageToUsers(
                         dto: deserializeResult,
                         botClient: _botClient,
                         cancellationToken: stoppingToken
                     );
+
+                    _lastSentJson = value;
                 }
                 catch (ApiRequestException ex)
                 {
@@ -65,8 +81,8 @@ public class OpsMotionBackgroundService : BackgroundService
                     Console.WriteLine($"Error: {e.Message}");
                 }
             }
-            
-            await Task.Delay(_pollInterval, stoppingToken);
+            NextIteration: 
+                await Task.Delay(_pollInterval, stoppingToken);
         }
     }
 }

@@ -17,8 +17,6 @@ public class UpdateHandler
     {
         try
         {
-            
-            
             var handler = update.Type switch
             {
                 UpdateType.Message => OnMessageReceived(botClient, update.Message, cancellationToken),

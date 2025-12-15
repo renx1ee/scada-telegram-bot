@@ -2216,9 +2216,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/SkadaTelegramBot.WebApi.csproj",
-      "projectName": "SkadaTelegramBot.WebApi",
-      "projectPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/SkadaTelegramBot.WebApi.csproj",
+      "projectUniqueName": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/SkadaTelegramBot.csproj",
+      "projectName": "SkadaTelegramBot",
+      "projectPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/SkadaTelegramBot.csproj",
       "packagesPath": "/Users/re/.nuget/packages/",
       "outputPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/",
       "projectStyle": "PackageReference",

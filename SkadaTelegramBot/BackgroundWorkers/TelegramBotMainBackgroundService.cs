@@ -1,8 +1,5 @@
-using System.Text.Json;
 using Microsoft.Extensions.Options;
-using Renx1ee.OPCControl;
 using SkadaTelegramBot_.Configurations;
-using SkadaTelegramBot_.DTOs;
 using SkadaTelegramBot_.Services;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -18,7 +15,7 @@ public class TelegramBotMainBackgroundService : BackgroundService
     private readonly IServiceProvider _serviceProvider;
     private readonly BotConfiguration _botConfiguration;
     private TelegramBotClient _botClient;
-    private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(1);
+    private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(0, 1, 5);
 
     public TelegramBotMainBackgroundService(
         ILogger<TelegramBotMainBackgroundService> logger,
