@@ -9,15 +9,6 @@ using Telegram.Bot.Exceptions;
 
 namespace SkadaTelegramBot_.BackgroundWorkers;
 
-// {
-//     "Id": 1,
-//     "Message": "Привет, мир!",
-//     "TelegramIds": [1398791366, 8114073508]
-// }
-// ошибки
-//      Использовать OPC UA Subscriptions (подписка на изменения) — идеальный вариант.
-//      Или хотя бы увеличить интервал (например, 5–10 сек) + backoff при ошибках.
-
 public class OpsMotionBackgroundService : BackgroundService
 {
     private readonly ILogger<OpsMotionBackgroundService> _logger;
@@ -69,6 +60,11 @@ public class OpsMotionBackgroundService : BackgroundService
                     botClient: _botClient,
                     cancellationToken: stoppingToken
                 );
+                
+                await _opcHelper.SendValueAsync(
+                    nodeId: _botOptions.NotificationResponseNodeId!,
+                    value: dto.Id.ToString(),
+                    cancellationToken: stoppingToken);
 
                 _lastSentJson = value;
             }
@@ -85,7 +81,6 @@ public class OpsMotionBackgroundService : BackgroundService
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
-                    throw;
                 }
             }
             catch (JsonException ex)
@@ -133,3 +128,12 @@ public class OpsMotionBackgroundService : BackgroundService
         return JsonSerializer.Serialize(errorObj);
     }
 }
+
+// {
+//     "Id": 1,
+//     "Message": "Привет, мир!",
+//     "TelegramIds": [1398791366, 8114073508]
+// }
+// ошибки
+//      Использовать OPC UA Subscriptions (подписка на изменения) — идеальный вариант.
+//      Или хотя бы увеличить интервал (например, 5–10 сек) + backoff при ошибках.

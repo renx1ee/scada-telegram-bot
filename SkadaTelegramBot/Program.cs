@@ -3,7 +3,6 @@ using Renx1ee.OPCControl.Configurations;
 using SkadaTelegramBot_.BackgroundWorkers;
 using SkadaTelegramBot_.Configurations;
 using SkadaTelegramBot_.Services;
-using Telegram.Bot;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +10,6 @@ var serverHostAddress = builder.Configuration.GetValue<string>("BotConfiguration
 
 builder.Services.Configure<BotOptions>(builder.Configuration.GetSection("BotConfiguration"));
 
-builder.Services.AddScoped<TelegramBotService>();
 builder.Services.AddSingleton<UpdateHandler>();
 builder.Services.AddSingleton<OpcHelper>(serviceProvider => 
     new OpcHelper(
