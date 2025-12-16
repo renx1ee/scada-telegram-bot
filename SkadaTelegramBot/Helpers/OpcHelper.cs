@@ -2,9 +2,9 @@ using System.Net;
 using Opc.Ua;
 using Opc.Ua.Client;
 
-namespace Renx1ee.OPCControl;
-// TODO IOpcHelper
-public class OpcHelper 
+namespace SkadaTelegramBot_.Helpers;
+
+public class OpcHelper : IOpcHelper
 {
     private readonly string _endpointUrl;
     private readonly ApplicationConfiguration _configuration;
@@ -24,7 +24,6 @@ public class OpcHelper
     {
         Console.WriteLine("Starting...");
         Console.WriteLine($"Current URL: {_endpointUrl}");
-        await _configuration.Validate(ApplicationType.Client);
         
         await TryToConnect(_endpointUrl);
 
@@ -63,7 +62,7 @@ public class OpcHelper
                 session?.CloseAsync(cancellationToken);
             }
         }
-        catch (ServiceResultException e) when (e.StatusCode == StatusCodes.BadSecureChannelClosed)
+        catch (ServiceResultException e) when (e.StatusCode == Opc.Ua.StatusCodes.BadSecureChannelClosed)
         {
             Console.WriteLine("Exception: ", e);
             return string.Empty;
@@ -108,16 +107,24 @@ public class OpcHelper
                 {
                     new WriteValue()
                     {
-                        NodeId = new NodeId(nodeId),
-                        Value = new DataValue(value)
+                        NodeId = NodeId.Parse(nodeId),
+                        AttributeId = Attributes.Value,
+                        Value = new DataValue()
+                        {
+                            Value = new Variant((string)value),
+                            StatusCode = Opc.Ua.StatusCodes.Good,
+                            SourceTimestamp = DateTime.UtcNow
+                        }
                     }
                 };
                 
-                var result = session.WriteAsync(
+                var response = await session.WriteAsync(
                     requestHeader: null,
                     nodesToWrite: nodesToWrite,
                     ct: cancellationToken
                 );
+                
+                Console.WriteLine(response.Results[0]);
             }
             finally
             {
@@ -130,18 +137,25 @@ public class OpcHelper
         }
     }
     
-    private async Task TryToConnect(string url)
+    private async Task<bool> TryToConnect(string url)
     {
         var uri = new Uri(url);
+        
+        if (string.IsNullOrWhiteSpace(url))
+            return false;
+        
         Console.WriteLine($"Attempt to connect to: {uri.Host}");
+        
         try
         {
             var ip = await Dns.GetHostAddressesAsync(uri.Host);
             Console.WriteLine($"DNS resolved in: {ip}");
+            return true;
         }
         catch (Exception e)
         {
             Console.WriteLine("DNS wasn't resolved: " + e.Message);
+            return false;
         }
     }
 
@@ -163,8 +177,6 @@ public class OpcHelper
             // This variable has any server
             var serverStatus = session.ReadValue("i=2258");
             Console.WriteLine("Status: " + serverStatus);
-            /*Console.WriteLine($"Time of server: {((ServerStatusDataType)serverStatus.Value).StartTime}");
-            Console.WriteLine($"Server statue: {((ServerStatusDataType)serverStatus.Value).State}");*/
         }
         catch (Exception e)
         {

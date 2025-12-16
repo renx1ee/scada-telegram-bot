@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkadaTelegramBot", "SkadaTelegramBot\SkadaTelegramBot.csproj", "{440A2BE9-82AD-45D9-BAE5-BFF5FB683337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renx1ee.OPCController", "Renx1ee.OPCController\Renx1ee.OPCController.csproj", "{15A4DC53-8B0D-4F8B-9CC4-5650433A5450}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,10 +12,6 @@ Global
 		{440A2BE9-82AD-45D9-BAE5-BFF5FB683337}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{440A2BE9-82AD-45D9-BAE5-BFF5FB683337}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{440A2BE9-82AD-45D9-BAE5-BFF5FB683337}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15A4DC53-8B0D-4F8B-9CC4-5650433A5450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15A4DC53-8B0D-4F8B-9CC4-5650433A5450}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15A4DC53-8B0D-4F8B-9CC4-5650433A5450}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15A4DC53-8B0D-4F8B-9CC4-5650433A5450}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

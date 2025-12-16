@@ -1,6 +1,6 @@
 using Opc.Ua;
 
-namespace Renx1ee.OPCControl.Configurations;
+namespace SkadaTelegramBot_.Configurations;
 
 public static class Config
 {

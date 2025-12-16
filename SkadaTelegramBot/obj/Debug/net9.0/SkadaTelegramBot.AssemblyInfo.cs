@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SkadaTelegramBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c77fedd07887d879bd37fc7d7a8c175eab9e150")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+babe46b7d6cc95d3e7b6143731b36b090b0b3574")]
 [assembly: System.Reflection.AssemblyProductAttribute("SkadaTelegramBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SkadaTelegramBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

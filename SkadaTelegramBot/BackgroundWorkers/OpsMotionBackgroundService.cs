@@ -1,8 +1,8 @@
 using System.Text.Json;
 using Microsoft.Extensions.Options;
-using Renx1ee.OPCControl;
 using SkadaTelegramBot_.Configurations;
 using SkadaTelegramBot_.DTOs;
+using SkadaTelegramBot_.Helpers;
 using SkadaTelegramBot_.Services;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -14,7 +14,7 @@ public class OpsMotionBackgroundService : BackgroundService
     private readonly ILogger<OpsMotionBackgroundService> _logger;
     private TelegramBotClient _botClient;
     private readonly UpdateHandler _updateHandler;
-    private readonly OpcHelper _opcHelper;
+    private readonly IOpcHelper _opcHelper;
     private readonly BotOptions _botOptions;
     private readonly TimeSpan _pollInterval = TimeSpan.FromSeconds(5); // TODO: из конфига
     private string? _lastSentJson = null;
@@ -23,7 +23,7 @@ public class OpsMotionBackgroundService : BackgroundService
         ILogger<OpsMotionBackgroundService> logger,
         IOptions<BotOptions> botOptions,
         UpdateHandler updateHandler,
-        OpcHelper opcHelper)
+        IOpcHelper opcHelper)
     {
         this._logger = logger;
         this._updateHandler = updateHandler;
@@ -46,9 +46,12 @@ public class OpsMotionBackgroundService : BackgroundService
                 value = await _opcHelper.GetValueAsync(
                     nodeId: _botOptions.NotificationNodeId!,
                     cancellationToken: stoppingToken);
-                
+
                 if (string.IsNullOrEmpty(value) || value == _lastSentJson)
+                {
+                    await Task.Delay(_pollInterval, stoppingToken);
                     continue;
+                }
             
                 var dto = JsonSerializer.Deserialize<RequestDto>(value);
 
@@ -74,7 +77,7 @@ public class OpsMotionBackgroundService : BackgroundService
                 try
                 {
                     await _opcHelper.SendValueAsync(
-                        nodeId: _botOptions.ErrorNodeId!,
+                        nodeId: _botOptions.NotificationResponseNodeId!,
                         value: CreateScadaErrorJson("Telegram API error", ex.Message),
                         cancellationToken: stoppingToken);
                 }
@@ -89,7 +92,7 @@ public class OpsMotionBackgroundService : BackgroundService
                 try
                 {
                     await _opcHelper.SendValueAsync(
-                        nodeId: _botOptions.ErrorNodeId!,
+                        nodeId: _botOptions.NotificationResponseNodeId!,
                         value: CreateScadaErrorJson("Invalid JSON from opc", $"Json Serialize exception with {value}"),
                         cancellationToken: stoppingToken);
                 }
@@ -102,7 +105,7 @@ public class OpsMotionBackgroundService : BackgroundService
                 if (scadaErrorValue != null)
                 {
                     await _opcHelper.SendValueAsync(
-                        nodeId: _botOptions.ErrorNodeId!,
+                        nodeId: _botOptions.NotificationResponseNodeId!,
                         value: scadaErrorValue,
                         cancellationToken: stoppingToken);
                 }
@@ -129,10 +132,13 @@ public class OpsMotionBackgroundService : BackgroundService
     }
 }
 
+// сделать переменную, в котторой будет обновляться время, что бы скада знала, что наш сервер жив
 // {
-//     "Id": 1,
-//     "Message": "Привет, мир!",
-//     "TelegramIds": [1398791366, 8114073508]
+//     "msgId": 1,
+//     "sysId": "SystemName", // number type
+//     "dvcId": "DeviceId", // string
+//     "msgText": "Привет, мир!",
+//     "tgIds": [1398791366, 8114073508]
 // }
 // ошибки
 //      Использовать OPC UA Subscriptions (подписка на изменения) — идеальный вариант.

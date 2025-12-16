@@ -28,8 +28,6 @@
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Telegram.Bot.dll
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Telegram.Bots.dll
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Telegram.Bots.Extensions.Polling.dll
-/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Renx1ee.OPCController.dll
-/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/bin/Debug/net9.0/Renx1ee.OPCController.pdb
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/SkadaTelegramBot.csproj.AssemblyReference.cache
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/rpswa.dswa.cache.json
 /Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/obj/Debug/net9.0/SkadaTelegramBot.GeneratedMSBuildEditorConfig.editorconfig

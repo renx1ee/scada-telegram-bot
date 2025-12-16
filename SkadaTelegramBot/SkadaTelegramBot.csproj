@@ -14,12 +14,4 @@
     <PackageReference Include="Telegram.Bots.Extensions.Polling" Version="5.9.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Renx1ee.OPCController\Renx1ee.OPCController.csproj" />
-  </ItemGroup>
-
 </Project>

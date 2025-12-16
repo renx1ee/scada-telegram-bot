@@ -4,79 +4,6 @@
     "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/SkadaTelegramBot.csproj": {}
   },
   "projects": {
-    "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj",
-        "projectName": "Renx1ee.OPCController",
-        "projectPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj",
-        "packagesPath": "/Users/re/.nuget/packages/",
-        "outputPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/re/.nuget/NuGet/NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net9.0"
-        ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
-      },
-      "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
-          "dependencies": {
-            "OPCFoundation.NetStandard.Opc.Ua.Client": {
-              "target": "Package",
-              "version": "[1.5.377.22, )"
-            },
-            "OPCFoundation.NetStandard.Opc.Ua.Core": {
-              "target": "Package",
-              "version": "[1.5.377.22, )"
-            },
-            "Telegram.Bots.Extensions.Polling": {
-              "target": "Package",
-              "version": "[5.9.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/SkadaTelegramBot/SkadaTelegramBot.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -98,11 +25,7 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {
-              "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj": {
-                "projectPath": "/Users/re/Documents/Projects/C#/TestProject/SkadaTelegramBot/Renx1ee.OPCController/Renx1ee.OPCController.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {

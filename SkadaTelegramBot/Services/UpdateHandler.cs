@@ -71,15 +71,13 @@ public class UpdateHandler
                 var firstName = message.From.FirstName;
                 var lastName = message.From.LastName ?? string.Empty;
                 var username = message.From.Username ?? string.Empty;
-                var isPremium = message.From.IsPremium;
-                var languageCode = message.From.LanguageCode ?? string.Empty;
 
                 StringBuilder text = new StringBuilder();
 
                 text.Append(
-                    "Данные об вашем аккаунте telegram: \n" +
-                    $"id: {id} \n" +
-                    $"is premium: {isPremium}\n" +
+                    "Перешлите это сообщение администратору в Telegram\n" + 
+                    "Данные об вашем аккаунте telegram\n" +
+                    $"id: {id}\n" +
                     $"first name: {firstName} \n"
                 );
                 
@@ -91,11 +89,6 @@ public class UpdateHandler
                 if (!string.IsNullOrEmpty(username))
                 {
                     text.Append($"user name: {username} \n");
-                }
-                
-                if (!string.IsNullOrEmpty(languageCode))
-                {
-                    text.Append($"language code: {languageCode} \n");
                 }
                 
                 await botClient.SendMessage(
@@ -130,27 +123,6 @@ public class UpdateHandler
             
                 Console.WriteLine($"Сообщение отправлено пользователю {user}");
             }
-        }
-        catch (ApiRequestException e)
-        {
-            Console.WriteLine($"Ошибка при отправке coобщения", e.Message);
-        }
-    }
-    
-    public async Task SendMessageToUser(
-        long userId,
-        string message,
-        ITelegramBotClient botClient,
-        CancellationToken cancellationToken)
-    {
-        try
-        {
-            await botClient.SendMessage(
-                chatId: userId,
-                text: message,
-                cancellationToken: cancellationToken);
-        
-            Console.WriteLine($"Сообщение отправлено пользователю {userId}");
         }
         catch (ApiRequestException e)
         {
