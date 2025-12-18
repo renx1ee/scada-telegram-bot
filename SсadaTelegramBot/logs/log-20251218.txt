@@ -1,0 +1,5 @@
+2025-12-18 01:36:21.297 +03:00 [ERR] Error: Error establishing a connection: BadNotConnected
+2025-12-18 01:36:21.297 +03:00 [ERR] Error: Error establishing a connection: BadNotConnected
+2025-12-18 01:36:26.329 +03:00 [ERR] Error: Error establishing a connection: BadNotConnected
+2025-12-18 03:23:57.714 +03:00 [ERR] Error: Error establishing a connection: BadNotConnected
+2025-12-18 03:23:57.714 +03:00 [ERR] Error: Error establishing a connection: BadNotConnected

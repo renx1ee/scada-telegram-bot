@@ -1,4 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using SkadaTelegramBot_.Configurations;
@@ -130,7 +129,7 @@ public class OpsMotionBackgroundService : BackgroundService
             await Task.Delay(_pollInterval, stoppingToken);
         }
     }
-
+    
     private string CreateScadaErrorJson(string errorType, string message, string? details = null)
     {
         var errorObj = new
@@ -143,12 +142,3 @@ public class OpsMotionBackgroundService : BackgroundService
         return JsonSerializer.Serialize(errorObj);
     }
 }
-
-// сделать переменную, в котторой будет обновляться время, что бы скада знала, что наш сервер жив
-// {
-//     "msgId": 1,
-//     "sysId": "SystemName", // number type
-//     "dvcId": "DeviceId", // string
-//     "msgText": "Привет, мир!",
-//     "tgIds": [1398791366, 8114073508]
-// }

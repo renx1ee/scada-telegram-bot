@@ -24,12 +24,14 @@ builder.Services.AddHostedService<TelegramBotMainBackgroundService>();
 builder.Services.AddHostedService<OpsMotionBackgroundService>();
 builder.Services.AddHostedService<ServerLifeTimeNotifierBackgroundService>();
 
+var loggingPathFile = builder.Configuration["Logging:PathFile"] ?? "logs/log-.txt";
+
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .MinimumLevel.Error()
     .Enrich.FromLogContext()
     .WriteTo.Console()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.File(loggingPathFile, rollingInterval: RollingInterval.Day)
     .CreateBootstrapLogger();
 
 builder.Host.UseSerilog();
@@ -48,7 +50,3 @@ if (app.Environment.IsDevelopment())
 }
 
 app.Run();
-
-// dotnet add package Serilog.AspNetCore
-// dotnet add package Serilog.Sinks.File
-// dotnet add package Serilog.Sinks.Console
